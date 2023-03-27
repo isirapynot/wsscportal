@@ -1,105 +1,85 @@
-import React, { useState, useEffect } from "react";
 import "./App.css";
 import "@aws-amplify/ui-react/styles.css";
-import { API } from "aws-amplify";
 import {
   Button,
-  Flex,
-  Heading,
-  Text,
-  TextField,
   View,
   withAuthenticator,
 } from "@aws-amplify/ui-react";
-import { listNotes } from "./graphql/queries";
-import {
-  createNote as createNoteMutation,
-  deleteNote as deleteNoteMutation,
-} from "./graphql/mutations";
+import { NavLink, Outlet } from "react-router-dom";
+import { Box, Link } from "@mui/material";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
 
-const App = ({ signOut }) => {
-  const [notes, setNotes] = useState([]);
-
-  useEffect(() => {
-    fetchNotes();
-  }, []);
-
-  async function fetchNotes() {
-    const apiData = await API.graphql({ query: listNotes });
-    const notesFromAPI = apiData.data.listNotes.items;
-    setNotes(notesFromAPI);
-  }
-
-  async function createNote(event) {
-    event.preventDefault();
-    const form = new FormData(event.target);
-    const data = {
-      name: form.get("name"),
-      description: form.get("description"),
-    };
-    await API.graphql({
-      query: createNoteMutation,
-      variables: { input: data },
-    });
-    fetchNotes();
-    event.target.reset();
-  }
-
-  async function deleteNote({ id }) {
-    const newNotes = notes.filter((note) => note.id !== id);
-    setNotes(newNotes);
-    await API.graphql({
-      query: deleteNoteMutation,
-      variables: { input: { id } },
-    });
-  }
-
+const App = (signOut) => {
+  console.log(signOut);
   return (
     <View className="App">
-      <Heading level={1}>My Notes App</Heading>
-      <View as="form" margin="3rem 0" onSubmit={createNote}>
-        <Flex direction="row" justifyContent="center">
-          <TextField
-            name="name"
-            placeholder="Note Name"
-            label="Note Name"
-            labelHidden
-            variation="quiet"
-            required
-          />
-          <TextField
-            name="description"
-            placeholder="Note Description"
-            label="Note Description"
-            labelHidden
-            variation="quiet"
-            required
-          />
-          <Button type="submit" variation="primary">
-            Create Note
-          </Button>
-        </Flex>
-      </View>
-      <Heading level={2}>Current Notes</Heading>
-      <View margin="3rem 0">
-        {notes.map((note) => (
-          <Flex
-            key={note.id || note.name}
-            direction="row"
-            justifyContent="center"
-            alignItems="center"
-          >
-            <Text as="strong" fontWeight={700}>
-              {note.name}
-            </Text>
-            <Text as="span">{note.description}</Text>
-            <Button variation="link" onClick={() => deleteNote(note)}>
-              Delete note
-            </Button>
-          </Flex>
-        ))}
-      </View>
-      <Button onClick={signOut}>Sign Out</Button>
+      <div className="HeaderSection">
+        <Box>
+          <Link href="/">
+            <img src="https://westsideswimclub.com/wp-content/themes/wssc/images/wssc-logo-shadow.png" alt="West Side Swim Club" className="wssclogo"></img>
+          </Link>
+        </Box>
+        <Box className="AboveNavBar">
+          <p>
+            <a href="https://www.westsideswimclub.com/about-us/our-location/">5533 Odana Rd.</a>, Madison, Wisc., 53719 &nbsp; &nbsp; &nbsp;  
+            <Button onClick={signOut.signOut}>Sign Out</Button>
+          </p>          
+        </Box>
+        <Box className="NavBar">
+          <a href="/">Home</a>
+        </Box>
+        <Box className="NavBar">
+          <NavLink to="/" >Account Management</NavLink>
+        </Box>
+      </div>
+{/** 
+      <header>
+        <div className="site-title">
+          <a href="/"><img src="https://westsideswimclub.com/wp-content/themes/wssc/images/wssc-logo-shadow.png" alt="West Side Swim Club" /></a>
+          <span style={{ fontSize: "1.7rem", }}>West Side Swim Club
+            <span><a href="/about-us/our-location/">5533 Odana Rd.</a>, Madison, Wisc., 53719</span>
+          </span>
+        </div>
+        <div id="wssc-top-menus" className="wssc-is-visible wssc-horizontal wssc-display-none" aria-hidden="false">
+          <div className="wssc-main-nav">            
+            <nav className="wssc-nav-menu" aria-label="Main Menu">
+              <ul id="wssc-main-nav">
+                <li className=" menu-item menu-item-type-custom menu-item-object-custom menu-item-17">
+                  <a href="/">
+                    Home
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+        <div id="wssc-second-menus" className="wssc-is-visible wssc-horizontal wssc-display-none" aria-hidden="false">
+          <div className="wssc-second-nav">            
+            <nav className="wssc-nav-menu" aria-label="Secondary Menu">
+              <ul id="wssc-second-nav">
+                <li className=" menu-item menu-item-type-custom menu-item-object-custom menu-item-17">
+                  <NavLink to="/" >Account Management</NavLink>
+                </li>
+                <li className=" menu-item menu-item-type-custom menu-item-object-custom menu-item-17">
+                  <NavLink to="/notes" >Notes</NavLink>
+                </li>
+              </ul>              
+            </nav>
+          </div>
+        </div>
+
+        <p>
+          <a href="/about-us/our-location/">5533 Odana Rd.</a>, Madison, Wisc., 53719 &nbsp; &nbsp; &nbsp;  
+          <Button onClick={signOut.signOut}>Sign Out</Button>
+        </p>
+      </header>
+*/}
+      <div id="pageContent">
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <Outlet />
+        </LocalizationProvider>
+      </div>
     </View>
   );
 };

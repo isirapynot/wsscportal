@@ -1,38 +1,41 @@
-.App {
-  text-align: center;
+#pageContent{
+  margin-left: 20px;
+  margin-right: 20px;
+}
+fieldset.sectionOutline{
+  border-width: 1px;
+  border-color: #0079AE;
+  border-style: solid;
+  border-radius: 10px;
+  padding: 10px;
+}
+fieldset.sectionOutline legend.sectionLabel{
+  margin-left: 10px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.NavBar,.AboveNavBar{
+  padding-left: 15vw;
+}
+.NavBar{
+  width: 100%;
+  background-color: #00afdc;
+  vertical-align: middle;
+  padding-top: .3em;
+  padding-bottom: .3em;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.NavBar a{
+  font-size: 1.2em;
+  color: #ffffff;
+  font-weight: bold;
+  text-decoration: none;
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.HeaderSection{
+  min-height: 185px;
+  min-height: 15vw;
 }
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+img.wssclogo {
+  max-width: 182px;
+  max-width: 15vw;
+  position: absolute;
 }

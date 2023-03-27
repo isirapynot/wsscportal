@@ -1,9 +1,55 @@
 # This "input" configures a global authorization rule to enable public access to
 # all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
-input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONLY!
+# input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONLY!
 
-type Note @model @auth(rules: [ { allow: public } ] ){
+type Note @model @auth(rules: [ { allow: public, operations: [read, create,update, delete] } ] ){
   id: ID!
   name: String!
   description: String
 }
+
+type MembershipType @model @auth(rules: [
+  { allow: private, operations: [read]},
+  { allow: groups, groups: ["Admin", "Administrator"], operations: [read, create,update] }
+]){
+  id: ID! @primaryKey
+  name: String!
+  newMemberRate: Float
+  returningMemberRate: Float
+}
+
+type TUInfo @model @auth(rules: [
+  { allow: private, operations: [read]},
+  { allow: groups, groups: ["Admin", "Administrator"], operations: [read, create,update] }
+]){
+  email: String! @index
+  data: String
+}
+
+
+type AccountInformation @model @auth(rules: [
+  { allow: owner, ownerField: "owner", operations: [read, create,update]},
+  { allow: groups, groups: ["Admin", "Administrator"], operations: [read, create,update] }
+]){
+  id: ID! @primaryKey
+  login: String! @index
+  membershipType: MembershipType @hasOne
+  balance: Float
+  address: String
+  email: String
+}
+
+type Member @model @auth(rules: [
+  { allow: owner, ownerField: "owner", operations: [read, create,update]},
+  { allow: groups, groups: ["Admin", "Administrator"], operations: [read, create,update] }
+]) {
+  id: ID! @primaryKey
+  accountLogin: ID! @index(name: "byMemberInAccount", sortKeyFields: ["birthDate"])
+  firstName: String
+  middleName: String
+  lastName: String
+  prefferedName: String
+  birthDate: String
+  gender: String
+}
+  

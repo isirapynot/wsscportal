@@ -4,8 +4,17 @@
     "apiName": "wsscportal",
     "serviceName": "AppSync",
     "defaultAuthType": {
-      "mode": "API_KEY",
-      "expirationTime": 7
-    }
+      "mode": "AMAZON_COGNITO_USER_POOLS",
+      "cognitoUserPoolId": "authwsscportal51fd8e0c"
+    },
+    "additionalAuthTypes": [
+      {
+        "mode": "API_KEY",
+        "expirationTime": 7,
+        "apiKeyExpirationDate": "2023-03-28T03:13:37.693Z",
+        "keyDescription": ""
+      }
+    ],
+    "conflictResolution": {}
   }
 }
